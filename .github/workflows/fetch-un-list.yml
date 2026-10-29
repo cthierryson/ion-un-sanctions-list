@@ -1,0 +1,35 @@
+name: Fetch UN Consolidated List
+
+# Runs every Monday 04:00 Hong Kong time (Sunday 20:00 UTC), and on demand.
+on:
+  schedule:
+    - cron: "0 20 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download UN Security Council Consolidated List
+        run: |
+          curl -fsSL --retry 5 --retry-delay 30 \
+            -A "Mozilla/5.0 (compatible; ION-Group-HK-KYC-weekly-check)" \
+            -o consolidated.new.xml \
+            https://scsanctions.un.org/resources/xml/en/consolidated.xml
+          # Fail (and keep last week's copy) unless the file really is the UN list
+          grep -q "<CONSOLIDATED_LIST" consolidated.new.xml
+          mv consolidated.new.xml consolidated.xml
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > last-checked.txt
+
+      - name: Save to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add consolidated.xml last-checked.txt
+          git commit -m "UN list check $(date -u +%F)" || echo "Nothing to commit"
+          git push

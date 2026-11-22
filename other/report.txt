@@ -1,0 +1,7 @@
+Version: 2026-11-22T02:23Z
+US OFAC SDN entries: 19599 (source https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.CSV + ALT.CSV)
+HK CEDB names checked: 791 across 11 regime files (source https://www.cedb.gov.hk/datagovhk/TFSlists/)
+  per file: afghanistan 140, central_african_republic 15, dprk 155, drcongo 61, haiti 6, isil_and_al_qaida 333, libya 24, somalia 21, south_sudan 8, sudan 17, yemen 11
+HK CEDB names not on the UN list (1007 UN refs): 0
+CEDB download problems: none
+Changes this week: 19599 added, 0 updated, 0 removed
